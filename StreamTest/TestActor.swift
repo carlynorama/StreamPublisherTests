@@ -63,7 +63,7 @@ actor TestService {
     }
     
     
-    public func asyncStream() -> AsyncStream<Int> {
+    public func alwaysHasSomethingToSayStream() -> AsyncStream<Int> {
         return AsyncStream.init(unfolding: unfolding, onCancel: onCancel)
         
         //() async -> _?
@@ -91,32 +91,6 @@ actor TestService {
         }
     }
     
-    //https://www.raywenderlich.com/34044359-asyncsequence-asyncstream-tutorial-for-ios
-    let numbersToQueue = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987]
-    public func numberQueue() -> AsyncStream<Int> {
-        var iterator = AsyncArray(values: numbersToQueue).makeAsyncIterator()
-        print("Queue called")
-        return AsyncStream.init(unfolding: unfolding, onCancel: onCancel)
-        
-        //() async -> _?
-        func unfolding() async -> Int? {
-            do {
-                if let item = try await iterator.next() {
-                    return item
-                }
-            } catch let error {
-                print(error.localizedDescription)
-            }
-            return nil
-            
-        }
-        
-        //optional
-        @Sendable func onCancel() -> Void {
-            print("confirm counter got canceled")
-        }
-    }
-    
     //FWIW, Acknowleding the the retain cycle problem
     public func syncStream() -> AsyncStream<Int> {
         AsyncStream { continuation in
@@ -135,11 +109,10 @@ struct ContentView: View {
         VStack {
             TestActorButton()
             HStack {
-                TestActorViewA()
+                //TestActorViewA()
                 TestActorViewB()
                 TestActorViewC()
                 TestActorViewD()
-                TestActorViewE()
             }
         }
         .padding()
@@ -167,7 +140,7 @@ struct TestActorViewA:View {
         Text("\(counterVal)")
             .task {
                 //Fires constantly.
-                for await value in await counter.asyncStream() {
+                for await value in await counter.alwaysHasSomethingToSayStream() {
                     print("View A Value: \(value)")
                     counterVal = value
                 }
@@ -204,12 +177,6 @@ struct TestActorViewC:View {
                     counterVal = value
                     //Doing something time consuming here does not matther to
                     //the spaming problem
-                    //Do something time consuming...
-                    //                    do {
-                    //                        try await Task.sleep(nanoseconds: 3_000_000_000)
-                    //                    } catch {
-                    //
-                    //                    }
                 }
             }
     }
@@ -221,38 +188,12 @@ struct TestActorViewD:View {
     @State var counterVal:Int = 0
     
     
-    
     var body: some View {
         Text("\(counterVal)")
             .task {
-                do {
-                    for try await value in await counter.numberQueue()  {
-                        print("View D Value: \(value)")
-                        counterVal = value
-                    }
-                } catch {
-                    //error if I do include, error if I don't
-                }
-            }
-    }
-}
-
-struct TestActorViewE:View {
-    var counter = TestService.shared
-    @State var counterVal:Int = 0
-    
-    
-    
-    var body: some View {
-        Text("\(counterVal)")
-            .task {
-                do {
-                    for try await value in await counter.bufferStream() {
-                        print("View E Value: \(value)")
-                        counterVal = value
-                    }
-                } catch {
-                    //error if I do include, error if I don't
+                for await value in await counter.bufferStream() {
+                    print("View D Value: \(value)")
+                    counterVal = value
                 }
             }
     }
