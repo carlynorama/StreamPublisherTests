@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DA2C3A6F28E2A2E6006962A0 /* Array+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2C3A6E28E2A2E6006962A0 /* Array+Sequence.swift */; };
+		DA2C3A7128E2C2DA006962A0 /* TestService+ArraySender.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2C3A7028E2C2DA006962A0 /* TestService+ArraySender.swift */; };
 		DA990B6C28E25A89003BE660 /* StreamTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA990B6B28E25A89003BE660 /* StreamTestApp.swift */; };
 		DA990B6E28E25A89003BE660 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA990B6D28E25A89003BE660 /* ContentView.swift */; };
 		DA990B7028E25A8B003BE660 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA990B6F28E25A8B003BE660 /* Assets.xcassets */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		DA2C3A6E28E2A2E6006962A0 /* Array+Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Sequence.swift"; sourceTree = "<group>"; };
+		DA2C3A7028E2C2DA006962A0 /* TestService+ArraySender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TestService+ArraySender.swift"; sourceTree = "<group>"; };
 		DA990B6828E25A89003BE660 /* StreamTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StreamTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA990B6B28E25A89003BE660 /* StreamTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamTestApp.swift; sourceTree = "<group>"; };
 		DA990B6D28E25A89003BE660 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 				DA990B6B28E25A89003BE660 /* StreamTestApp.swift */,
 				DA990B7A28E25AB7003BE660 /* TestActor.swift */,
 				DA2C3A6E28E2A2E6006962A0 /* Array+Sequence.swift */,
+				DA2C3A7028E2C2DA006962A0 /* TestService+ArraySender.swift */,
 				DA990B6D28E25A89003BE660 /* ContentView.swift */,
 				DA990B6F28E25A8B003BE660 /* Assets.xcassets */,
 				DA990B7128E25A8B003BE660 /* StreamTest.entitlements */,
@@ -147,6 +150,7 @@
 			files = (
 				DA990B7B28E25AB8003BE660 /* TestActor.swift in Sources */,
 				DA990B6E28E25A89003BE660 /* ContentView.swift in Sources */,
+				DA2C3A7128E2C2DA006962A0 /* TestService+ArraySender.swift in Sources */,
 				DA2C3A6F28E2A2E6006962A0 /* Array+Sequence.swift in Sources */,
 				DA990B6C28E25A89003BE660 /* StreamTestApp.swift in Sources */,
 			);
