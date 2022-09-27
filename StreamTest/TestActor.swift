@@ -38,6 +38,12 @@ actor TestService {
     
     var isActive = true
     
+    //TODO: Confirm
+    //will end the while loops for all bufferStream() created AsyncStreams
+    public func endBufferStreams() async {
+        isActive = false
+    }
+    
     public func bufferStream() -> AsyncStream<Int> {
         return AsyncStream.init(unfolding: unfolding, onCancel: onCancel)
         //() async -> _?
@@ -109,6 +115,7 @@ actor TestService {
     }
     
     //FWIW, Acknowleding the the retain cycle problem
+    //Should explictly name and save the task for later cancelation
     public func syncStream() -> AsyncStream<Int> {
         AsyncStream { continuation in
             Task {
