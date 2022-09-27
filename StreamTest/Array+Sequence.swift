@@ -41,21 +41,18 @@ struct TestNumberQueueView:View {
     var body: some View {
         Text("\(counterVal)")
             .task {
-                do {
-                    for try await value in await counter.numberQueue()  {
-                        print("NumberQueue Val: \(value)")
-                        counterVal = value
-                    }
-                } catch {
-                    //error if I do include, error if I don't
+                for await value in await counter.numberQueue()  {
+                    print("NumberQueue Val: \(value)")
+                    counterVal = value
                 }
+                
             }
     }
 }
 
 extension TestService {
     
-
+    
     public func numberQueue() -> AsyncStream<Int> {
         let numbersToQueue = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987]
         var iterator = AsyncArray(values: numbersToQueue).makeAsyncIterator()
