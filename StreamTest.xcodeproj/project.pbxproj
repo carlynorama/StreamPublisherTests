@@ -13,7 +13,7 @@
 		DA990B6E28E25A89003BE660 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA990B6D28E25A89003BE660 /* ContentView.swift */; };
 		DA990B7028E25A8B003BE660 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA990B6F28E25A8B003BE660 /* Assets.xcassets */; };
 		DA990B7428E25A8B003BE660 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA990B7328E25A8B003BE660 /* Preview Assets.xcassets */; };
-		DA990B7B28E25AB8003BE660 /* TestActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA990B7A28E25AB7003BE660 /* TestActor.swift */; };
+		DA990B7B28E25AB8003BE660 /* TestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA990B7A28E25AB7003BE660 /* TestService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +25,7 @@
 		DA990B6F28E25A8B003BE660 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DA990B7128E25A8B003BE660 /* StreamTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StreamTest.entitlements; sourceTree = "<group>"; };
 		DA990B7328E25A8B003BE660 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		DA990B7A28E25AB7003BE660 /* TestActor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestActor.swift; sourceTree = "<group>"; };
+		DA990B7A28E25AB7003BE660 /* TestService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				DA990B6B28E25A89003BE660 /* StreamTestApp.swift */,
-				DA990B7A28E25AB7003BE660 /* TestActor.swift */,
+				DA990B7A28E25AB7003BE660 /* TestService.swift */,
 				DA2C3A6E28E2A2E6006962A0 /* Array+Sequence.swift */,
 				DA2C3A7028E2C2DA006962A0 /* TestService+ArraySender.swift */,
 				DA990B6D28E25A89003BE660 /* ContentView.swift */,
@@ -148,7 +148,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA990B7B28E25AB8003BE660 /* TestActor.swift in Sources */,
+				DA990B7B28E25AB8003BE660 /* TestService.swift in Sources */,
 				DA990B6E28E25A89003BE660 /* ContentView.swift in Sources */,
 				DA2C3A7128E2C2DA006962A0 /* TestService+ArraySender.swift in Sources */,
 				DA2C3A6F28E2A2E6006962A0 /* Array+Sequence.swift in Sources */,
