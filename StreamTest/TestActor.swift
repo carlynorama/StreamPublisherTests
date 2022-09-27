@@ -91,6 +91,23 @@ actor TestService {
         }
     }
     
+    public func constantStream() -> AsyncStream<Int> {
+        return AsyncStream.init(unfolding: unfolding, onCancel: onCancel)
+        
+        //() async -> _?
+        func unfolding() async -> Int? {
+            for await n in $counter.values {
+                return n
+            }
+            return nil
+        }
+        
+        //optional
+        @Sendable func onCancel() -> Void {
+            print("confirm counter got canceled")
+        }
+    }
+    
     //FWIW, Acknowleding the the retain cycle problem
     public func syncStream() -> AsyncStream<Int> {
         AsyncStream { continuation in
@@ -109,7 +126,7 @@ struct ContentView: View {
         VStack {
             TestActorButton()
             HStack {
-                //TestActorViewA()
+                TestActorViewA()
                 TestActorViewB()
                 TestActorViewC()
                 TestActorViewD()
@@ -136,13 +153,22 @@ struct TestActorViewA:View {
     var counter = TestService.shared
     @State var counterVal:Int = 0
     
+    
     var body: some View {
         Text("\(counterVal)")
             .task {
                 //Fires constantly.
-                for await value in await counter.alwaysHasSomethingToSayStream() {
-                    print("View A Value: \(value)")
-                    counterVal = value
+                for await value in await counter.constantStream() {
+                    if value != counterVal {
+                        print("View A Value: \(value)")
+                        counterVal = value
+                    }
+                    //Expensive work or explicit rate limiter.
+                    do {
+                        try await Task.sleep(nanoseconds: 1_000_000_000)
+                    } catch {
+                        
+                    }
                 }
             }
     }
