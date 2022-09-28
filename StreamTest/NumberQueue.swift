@@ -10,15 +10,15 @@ import SwiftUI
 
 
 
-struct TestNumberQueueView:View {
-    var counter = TestService.shared
+struct NumberQueueView:View {
+    var queue = NumberQueuer(numbers: [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987])
     @State var counterVal:Int = 0
     
     
     var body: some View {
         Text("\(counterVal)")
             .task {
-                for await value in await counter.numberQueue()  {
+                for await value in queue.queueStream()  {
                     print("NumberQueue Val: \(value)")
                     counterVal = value
                 }
@@ -27,10 +27,11 @@ struct TestNumberQueueView:View {
     }
 }
 
-extension TestService {
-    public func numberQueue() -> AsyncStream<Int> {
-        let numbersToQueue = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987]
-        var iterator = AsyncArray(values: numbersToQueue).makeAsyncIterator()
+struct NumberQueuer {
+    let numbers:[Int]
+    
+    public func queueStream() -> AsyncStream<Int> {
+        var iterator = AsyncArray(values: numbers).makeAsyncIterator()
         print("Queue called")
         return AsyncStream.init(unfolding: unfolding, onCancel: onCancel)
         

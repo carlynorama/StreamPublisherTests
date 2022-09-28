@@ -128,20 +128,7 @@ actor TestService {
     
 }
 
-struct ContentView: View {
-    var body: some View {
-        VStack {
-            TestActorButton()
-            HStack {
-                TestActorViewA()
-                TestActorViewB()
-                TestActorViewC()
-                TestActorViewD()
-            }
-        }
-        .padding()
-    }
-}
+
 
 
 struct TestActorButton:View {
