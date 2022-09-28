@@ -42,6 +42,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA58A8A428E3D85D00C58226 /* UsesPublisher */ = {
+			isa = PBXGroup;
+			children = (
+				DA990B7A28E25AB7003BE660 /* TestService.swift */,
+			);
+			path = UsesPublisher;
+			sourceTree = "<group>";
+		};
+		DA58A8A528E3D87000C58226 /* NoPublisher */ = {
+			isa = PBXGroup;
+			children = (
+				DA58A8A228E3C79100C58226 /* NumberGenerator.swift */,
+				DA2C3A7028E2C2DA006962A0 /* NumberQueue.swift */,
+			);
+			path = NoPublisher;
+			sourceTree = "<group>";
+		};
 		DA990B5F28E25A89003BE660 = {
 			isa = PBXGroup;
 			children = (
@@ -63,9 +80,8 @@
 			isa = PBXGroup;
 			children = (
 				DA990B6B28E25A89003BE660 /* StreamTestApp.swift */,
-				DA58A8A228E3C79100C58226 /* NumberGenerator.swift */,
-				DA2C3A7028E2C2DA006962A0 /* NumberQueue.swift */,
-				DA990B7A28E25AB7003BE660 /* TestService.swift */,
+				DA58A8A528E3D87000C58226 /* NoPublisher */,
+				DA58A8A428E3D85D00C58226 /* UsesPublisher */,
 				DA2C3A6E28E2A2E6006962A0 /* Array+Sequence.swift */,
 				DA990B6D28E25A89003BE660 /* ContentView.swift */,
 				DA990B6F28E25A8B003BE660 /* Assets.xcassets */,
