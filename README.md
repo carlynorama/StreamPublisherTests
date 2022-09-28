@@ -1,7 +1,7 @@
 #  Using Async Streams
 
 Exploration of how to use AsyncStreams to get information out of classes and 
-actors by wrapping @Published variables or replaceing them alltogether. 
+actors by wrapping @Published variables or replacing them all together. 
 
 
 ## Resources
@@ -14,6 +14,8 @@ actors by wrapping @Published variables or replaceing them alltogether.
 # AsyncStream Types
 - https://github.com/apple/swift-evolution/blob/main/proposals/0314-async-stream.md
 - https://www.raywenderlich.com/34044359-asyncsequence-asyncstream-tutorial-for-ios
+- Meet the new alternative to Combine's Publisher! (it's called AsyncStream) https://www.youtube.com/watch?v=UwwKJLrg_0U 
+- https://stackoverflow.com/questions/73860731/asyncstream-spams-view-where-asyncpublisher-does-not/
 
 # Fold/Unfold
 - Why the name "unfolding"
@@ -23,15 +25,16 @@ actors by wrapping @Published variables or replaceing them alltogether.
 
 # Motivation
 
-I ran into a behavior with AsyncStream I that did not make sense to me at first, and posted the following to (StackOverflow)
+I ran into a behavior with AsyncStream I that did not make sense to me at first.
 
-When I have an actor with a published variable, I can "subscribe" to it via an AsyncPublisher and it behaves as expected, updating only when there is a change in value. If I create an AsyncStream with a synchronous context (but with a potential task retention problem) it also behaves as expected.
+I had an actor with a published variable which I could can "subscribe" to via an AsyncPublisher and it behaved as expected, updating only when there is a change in value. If I created an AsyncStream with a synchronous context (but with a potential task retention problem) it also behaved as expected.
 
-The weirdness happens when I try to wrap that publisher in an AsyncStream with an asyncronous context. It starts spamming the view with an update per loop it seems, NOT only when there is a change.  
+The weirdness happened when I wrapped that publisher in an AsyncStream with an asynchronous context. It started spamming the view with an update per loop it seems, NOT only when there was a change.  
 
-What am I missing about the AsyncStream.init(unfolding:oncancel:) which is causing this behavior?
+I created this project to help figure out what I was missing about  (AsyncStream.init(unfolding:oncancel:))[https://developer.apple.com/documentation/swift/asyncstream/init(unfolding:oncancel:)?]
 
-https://developer.apple.com/documentation/swift/asyncstream/init(unfolding:oncancel:)?  
+
+## Initial Code
 
 ```
 import Foundation
@@ -66,11 +69,12 @@ actor TestService {
         }
     }
     
-    //FWIW, Acknowleding the potential retain cycle problem here.
-    public func syncStream() -> AsyncStream<Int> {
+    //has a task retain problem. 
+   public func syncStream() -> AsyncStream<Int> {
         AsyncStream { continuation in
             Task {
                 for await n in $counter.values {
+                    //do hard work to transform n 
                     continuation.yield(n)
                 }
             }
@@ -156,148 +160,96 @@ struct TestActorViewC:View {
 
 ```
 
-I semi-answered my own questions:
+## Best Answer for Simply Wrapping Publisher
 
-From what I can tell the "unfolding" style initializer for AsyncStream is not a perfect fit for wrapping an AsyncPublisher. It's a "pull" from within the stream, so from the point of view of the receiver the stream will just keep pushing values since the stream has the infinite well of the AsyncPublisher value to draw from.
-
-It seems like the unfolding style is best used when creating a stream for a finite (but potentially very large) list of items to process. One can force it to work with an @Published by creating a buffer array that is checked repeatedly, and since this solution uses a `didSet`, the variable wouldn't actually need to be @Published anymore. If one has work one wants to do in the actor/class and managing the Task seems more annoying it *might* be worth it to do this way. 
-
-
-**Buffer -> Stream Example**
+The real solution to wrapping a publisher appears to be to stick to the synchronous context initializer and have it cancel it's own task: 
 
 ```
-//inside TestService
-
-//-- Change
-    @MainActor @Published var counter:Int = 0 {
-        didSet {
-            Task { await updateBuffer(newValue:counter) }
-        }
-    }
-
-//-- New
-    var counterBuffer:[Int] = []
-    
-    func updateBuffer(newValue:Int) async {
-        counterBuffer.append(newValue)
-    }
-    
-    func fifoPopValue() -> Int? {
-        guard !counterBuffer.isEmpty else {
-            return nil
-        }
-        return counterBuffer.removeFirst()
-    }
-    
-    var isActive = true
-    
-    public func bufferStream() -> AsyncStream<Int> {
-        return AsyncStream.init(unfolding: unfolding, onCancel: onCancel)
-        //() async -> _?
-        func unfolding() async -> Int? {
-            while isActive {
-                if let value = fifoPopValue() {
-                    return value
-                }
-                do {
-                    try await Task.sleep(nanoseconds: 1_000_000)
-                } catch {
-                    
-                }
-                
-            }
-            return nil
-        }
-        
-        //optional
-        @Sendable func onCancel() -> Void {
-            print("confirm counter got canceled")
-        }
-    }
-```
-
-With the view:
-```
-struct TestActorViewD:View {
-    var counter = TestService.shared
-    @State var counterVal:Int = 0
-    
-    
-    var body: some View {
-        Text("\(counterVal)")
-            .task {
-                for await value in await counter.bufferStream() {
-                    print("View D Value: \(value)")
-                    counterVal = value
+public func stream() -> AsyncStream<Int> {
+        AsyncStream { continuation in
+            let streamTask = Task {
+                for await n in $counter.values {
+                    //do hard work to transform n 
+                    continuation.yield(n)
                 }
             }
+
+            continuation.onTermination = { @Sendable _ in
+                streamTask.cancel()
+                print("StreamTask Canceled")
+            }
+
+        }
     }
-}
 ```
 
-**Constant Regular Ping** 
+## Use case for the "Unfolding" init style 
 
-Alternatively if having a value that is a regular ping is something you'd want, changing `asyncStream()` to something like
+From what I can tell the "unfolding" style initializer for AsyncStream is simply not a fit for wrapping an AsyncPublisher. The "unfolding" function will "pull" at the published value from within the stream, so the stream will just keep pushing values from that infinite well.
+
+It seems like the "unfolding" style initializer is best used when processing a finite (but potentially very large) list of items, or when generating ones values from scratch... something like:  
 
 ```
-public func alwaysHasSomethingToSayStream() -> AsyncStream<Int> {
+struct NumberQueuer {
+    let numbers:[Int]
+    
+    public func queueStream() -> AsyncStream<Int> {
+        var iterator = AsyncArray(values: numbers).makeAsyncIterator()
+        print("Queue called")
         return AsyncStream.init(unfolding: unfolding, onCancel: onCancel)
         
         //() async -> _?
         func unfolding() async -> Int? {
-            for await n in $counter.values {
-                
-                //Adding time consuming code will cause the updates to slow
-                //(i.e. to 3 seconds.) If the value is updated faster than 
-                //the code is running it will process each value in turn  
-                //until it has caught up to the final value.
-                //Once it has caught up it will continue push the value.
-                do {
-                    try await Task.sleep(nanoseconds: 3_000_000_000)
-                } catch {
-                    
+            do {
+                if let item = try await iterator.next() {
+                    return item
                 }
-                return n
+            } catch let error {
+                print(error.localizedDescription)
             }
             return nil
+            
         }
         
         //optional
         @Sendable func onCancel() -> Void {
-            print("confirm counter got canceled")
+            print("confirm NumberQueue got canceled")
         }
     }
-```
-
-**Clean Up on Receiver**
-
-Or you could leave the sender alone and tidy things up on the view end with a diff on the old and new values, but this seems resource intensive.  
-
-```
-struct TestActorViewA:View {
-    var counter = TestService.shared
-    @State var counterVal:Int = 0
     
+}
+
+public struct AsyncArray<Element>: AsyncSequence, AsyncIteratorProtocol {
     
-    var body: some View {
-        Text("\(counterVal)")
-            .task {
-              //Constantly getting, not constantly doing anything about it.
-                for await value in await counter.asyncStream() {
-                    if value != counterVal {
-                        print("View A Value: \(value)")
-                        counterVal = value
-                    }
-                    //Expensive work or explicit rate limiter.
-                    do {
-                        try await Task.sleep(nanoseconds: 1_000_000_000)
-                    } catch {
-                        
-                    }
-                }
-            }
+    let values:[Element]
+    let delay:TimeInterval
+    
+    var currentIndex = -1
+    
+    public init(values: [Element], delay:TimeInterval = 1) {
+        self.values = values
+        self.delay = delay
+    }
+    
+    public mutating func next() async throws -> Element? {
+        currentIndex += 1
+        guard currentIndex < values.count else {
+            return nil
+        }
+        try await Task.sleep(nanoseconds: UInt64(delay * 1E09))
+        return values[currentIndex]
+    }
+    
+    public func makeAsyncIterator() -> AsyncArray {
+        self
     }
 }
+
 ```
 
-This project was a way to share that code and build on it a little further. 
+One can force the unfolding type to work with an @Published by creating a buffer array that is checked repeatedly. The variable wouldn't actually need to be @Published anymore. This approach has a lot of problems but it can be made to work. See `BufferArrayStream` 
+
+
+
+
+
