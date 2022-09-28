@@ -8,15 +8,42 @@
 import SwiftUI
 
 
+struct IncrementButton:View {
+    var counter = SimpleAsyncPublisher.shared
+    var sloppyStream = SloppyStream.shared
+    var bufferStream = BufferArrayStream.shared
+    var managedTaskStream = StreamWithTask.shared
+    
+    
+    var body: some View {
+        Button("increment counter") {
+            Task { await counter.updateCounter(by: 2) }
+            Task { await sloppyStream.updateCounter(by: 2) }
+            Task { await bufferStream.updateCounter(by: 2) }
+            Task { await managedTaskStream.updateCounter(by: 2) }
+         }
+        }
+    }
+
+
+
 struct ContentView: View {
+   
+    
+    @State var showHide = true
+    
     var body: some View {
         VStack {
-            TestActorButton()
-            HStack {
-                TestActorViewA()
-                TestActorViewB()
-                TestActorViewC()
-                TestActorViewD()
+            Button("Show/Hide") { showHide.toggle() }
+            if showHide {
+                IncrementButton()
+                
+                HStack {
+                    SloppyStreamView()
+                    SimpleAPView()
+                    ManagedTask()
+                    BufferStreamView()
+                }
             }
             HStack {
                 NumberGeneratorView()

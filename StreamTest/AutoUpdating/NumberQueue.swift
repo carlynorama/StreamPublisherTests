@@ -19,7 +19,7 @@ struct NumberQueueView:View {
         Text("\(counterVal)")
             .task {
                 for await value in queue.queueStream()  {
-                    print("NumberQueue Val: \(value)")
+                    //print("NumberQueue Val: \(value)")
                     counterVal = value
                 }
                 
@@ -50,7 +50,7 @@ struct NumberQueuer {
         
         //optional
         @Sendable func onCancel() -> Void {
-            print("confirm counter got canceled")
+            print("confirm NumberQueue got canceled")
         }
     }
     

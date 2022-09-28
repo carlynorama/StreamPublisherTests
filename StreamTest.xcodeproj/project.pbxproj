@@ -9,17 +9,23 @@
 /* Begin PBXBuildFile section */
 		DA2C3A6F28E2A2E6006962A0 /* Array+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2C3A6E28E2A2E6006962A0 /* Array+Sequence.swift */; };
 		DA2C3A7128E2C2DA006962A0 /* NumberQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2C3A7028E2C2DA006962A0 /* NumberQueue.swift */; };
+		DA460CF128E4D10D00C40E8B /* BufferArrayStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA460CF028E4D10D00C40E8B /* BufferArrayStream.swift */; };
+		DA460CF328E4D3DD00C40E8B /* StreamWithTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA460CF228E4D3DD00C40E8B /* StreamWithTask.swift */; };
+		DA460CF528E4E55800C40E8B /* JustAsyncPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA460CF428E4E55800C40E8B /* JustAsyncPublisher.swift */; };
 		DA58A8A328E3C79100C58226 /* NumberGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA58A8A228E3C79100C58226 /* NumberGenerator.swift */; };
 		DA990B6C28E25A89003BE660 /* StreamTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA990B6B28E25A89003BE660 /* StreamTestApp.swift */; };
 		DA990B6E28E25A89003BE660 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA990B6D28E25A89003BE660 /* ContentView.swift */; };
 		DA990B7028E25A8B003BE660 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA990B6F28E25A8B003BE660 /* Assets.xcassets */; };
 		DA990B7428E25A8B003BE660 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA990B7328E25A8B003BE660 /* Preview Assets.xcassets */; };
-		DA990B7B28E25AB8003BE660 /* TestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA990B7A28E25AB7003BE660 /* TestService.swift */; };
+		DA990B7B28E25AB8003BE660 /* SloppyStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA990B7A28E25AB7003BE660 /* SloppyStream.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		DA2C3A6E28E2A2E6006962A0 /* Array+Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Sequence.swift"; sourceTree = "<group>"; };
 		DA2C3A7028E2C2DA006962A0 /* NumberQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberQueue.swift; sourceTree = "<group>"; };
+		DA460CF028E4D10D00C40E8B /* BufferArrayStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferArrayStream.swift; sourceTree = "<group>"; };
+		DA460CF228E4D3DD00C40E8B /* StreamWithTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamWithTask.swift; sourceTree = "<group>"; };
+		DA460CF428E4E55800C40E8B /* JustAsyncPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JustAsyncPublisher.swift; sourceTree = "<group>"; };
 		DA58A8A128E3BC5000C58226 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DA58A8A228E3C79100C58226 /* NumberGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberGenerator.swift; sourceTree = "<group>"; };
 		DA990B6828E25A89003BE660 /* StreamTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StreamTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -28,7 +34,7 @@
 		DA990B6F28E25A8B003BE660 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DA990B7128E25A8B003BE660 /* StreamTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StreamTest.entitlements; sourceTree = "<group>"; };
 		DA990B7328E25A8B003BE660 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		DA990B7A28E25AB7003BE660 /* TestService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestService.swift; sourceTree = "<group>"; };
+		DA990B7A28E25AB7003BE660 /* SloppyStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SloppyStream.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,21 +48,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DA58A8A428E3D85D00C58226 /* UsesPublisher */ = {
+		DA58A8A428E3D85D00C58226 /* UpdateOnInteraction */ = {
 			isa = PBXGroup;
 			children = (
-				DA990B7A28E25AB7003BE660 /* TestService.swift */,
+				DA990B7A28E25AB7003BE660 /* SloppyStream.swift */,
+				DA460CF428E4E55800C40E8B /* JustAsyncPublisher.swift */,
+				DA460CF228E4D3DD00C40E8B /* StreamWithTask.swift */,
+				DA460CF028E4D10D00C40E8B /* BufferArrayStream.swift */,
 			);
-			path = UsesPublisher;
+			path = UpdateOnInteraction;
 			sourceTree = "<group>";
 		};
-		DA58A8A528E3D87000C58226 /* NoPublisher */ = {
+		DA58A8A528E3D87000C58226 /* AutoUpdating */ = {
 			isa = PBXGroup;
 			children = (
+				DA2C3A6E28E2A2E6006962A0 /* Array+Sequence.swift */,
 				DA58A8A228E3C79100C58226 /* NumberGenerator.swift */,
 				DA2C3A7028E2C2DA006962A0 /* NumberQueue.swift */,
 			);
-			path = NoPublisher;
+			path = AutoUpdating;
 			sourceTree = "<group>";
 		};
 		DA990B5F28E25A89003BE660 = {
@@ -80,9 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				DA990B6B28E25A89003BE660 /* StreamTestApp.swift */,
-				DA58A8A528E3D87000C58226 /* NoPublisher */,
-				DA58A8A428E3D85D00C58226 /* UsesPublisher */,
-				DA2C3A6E28E2A2E6006962A0 /* Array+Sequence.swift */,
+				DA58A8A528E3D87000C58226 /* AutoUpdating */,
+				DA58A8A428E3D85D00C58226 /* UpdateOnInteraction */,
 				DA990B6D28E25A89003BE660 /* ContentView.swift */,
 				DA990B6F28E25A8B003BE660 /* Assets.xcassets */,
 				DA990B7128E25A8B003BE660 /* StreamTest.entitlements */,
@@ -169,11 +178,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA990B7B28E25AB8003BE660 /* TestService.swift in Sources */,
+				DA460CF528E4E55800C40E8B /* JustAsyncPublisher.swift in Sources */,
+				DA990B7B28E25AB8003BE660 /* SloppyStream.swift in Sources */,
 				DA990B6E28E25A89003BE660 /* ContentView.swift in Sources */,
 				DA2C3A7128E2C2DA006962A0 /* NumberQueue.swift in Sources */,
 				DA2C3A6F28E2A2E6006962A0 /* Array+Sequence.swift in Sources */,
+				DA460CF128E4D10D00C40E8B /* BufferArrayStream.swift in Sources */,
 				DA58A8A328E3C79100C58226 /* NumberGenerator.swift in Sources */,
+				DA460CF328E4D3DD00C40E8B /* StreamWithTask.swift in Sources */,
 				DA990B6C28E25A89003BE660 /* StreamTestApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
