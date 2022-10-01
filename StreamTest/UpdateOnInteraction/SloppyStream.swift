@@ -62,9 +62,9 @@ actor SloppyStream {
                 
                 //Adding time consuming code will cause the updates to slow
                 //(i.e. to 3 seconds.) If the value is updated faster than the
-                //code is runing it will process each value in turn until it
+                //code is running it will process each value in turn until it
                 //has caught up to the final value.
-                //Once it has caught up it will contine push the value.
+                //Once it has caught up it will continue to push the value.
                 do {
                     try await Task.sleep(nanoseconds: 3_000_000_000)
                 } catch {

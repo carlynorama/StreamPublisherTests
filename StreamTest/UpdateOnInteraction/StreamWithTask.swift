@@ -20,8 +20,8 @@ struct ManagedTask:View {
                 for await value in await counter.stream() {
                     print("Stream With Task: \(value)")
                     counterVal = value
-                    //Doing something time consuming here does not matther to
-                    //the spaming problem
+                    //Doing something time consuming here does not matter to
+                    //the spamming problem
                 }
             }
     }
