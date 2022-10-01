@@ -6,8 +6,6 @@ actors by wrapping @Published variables or replacing them all together.
 
 ## TL;DR
 
-
-
 The real solution to wrapping an `AsyncPublisher` appears to be to stick to the synchronous context initializer and have it cancel it's own task: 
 
 ```
@@ -73,7 +71,7 @@ Stand Alone AsyncStreams:
 
 
 
-# Motivation
+## Motivation
 
 I ran into a behavior with AsyncStream I that did not make sense to me at first.
 
@@ -274,7 +272,6 @@ public struct AsyncArray<Element>: AsyncSequence, AsyncIteratorProtocol {
 
 ```
 
-One can force the unfolding type to work with an @Published by creating a buffer array that is checked repeatedly. The variable wouldn't actually need to be @Published anymore. This approach has a lot of problems but it can be made to work. See `BufferArrayStream` 
 
 
 
