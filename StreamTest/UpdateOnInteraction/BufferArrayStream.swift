@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 
+
 struct BufferStreamView:View {
     var counter = BufferArrayStream.shared
     @State var counterVal:Int = 0
@@ -30,6 +31,7 @@ struct BufferStreamView:View {
 
 
 //In this example the stream consumes the buffer, so only one per actor.
+//This is not the most elegant solution.  
 actor BufferArrayStream {
     static var shared = BufferArrayStream()
     

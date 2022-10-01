@@ -4,6 +4,52 @@ Exploration of how to use AsyncStreams to get information out of classes and
 actors by wrapping @Published variables or replacing them all together. 
 
 
+## TL;DR
+
+Best way easy to wrap an @Published in a Stream:
+
+```
+actor StreamWithTask {
+    static let shared = StreamWithTask()
+    
+    @MainActor @Published var counter:Int = 0
+    @MainActor public func updateCounter(by delta:Int) async {
+        counter = counter + delta
+    }
+
+    
+    public func stream() -> AsyncStream<Int> {
+        AsyncStream { continuation in
+            let streamTask = Task {
+                for await n in $counter.values {
+                    continuation.yield(n)
+                }
+            }
+
+            continuation.onTermination = { @Sendable _ in
+                streamTask.cancel()
+                print("StreamTask Canceled")
+            }
+
+        }
+    }
+```
+
+## Contents
+
+
+Working With AsyncPublisher:
+- `JustAsyncPublisher` - Standard for-await AsyncPublisher use case
+- `StreamWithTask` - AsyncStream that uses a continuation but cancels its own task *recommended*
+- `SloppyStream` - 2 examples AsyncStreams that uses the unfolding init, badly. Not a good fit for this task.
+- `BufferArrayStream` - Trying to rate limit the well of values from the publisher by using a buffer array. This is not a recommended solution, but it "works." 
+
+Stand Alone AsyncStreams: 
+- `NumberGenerator` - AsyncStream that kicks out random numbers based on a timer
+- `NumberQueue` - AsyncStream that kicks out the values in an array based on a timer
+
+
+
 ## Resources
 
 # Related Projects
@@ -22,6 +68,8 @@ actors by wrapping @Published variables or replacing them all together.
 -  "When is a function a fold or an unfold?" Jeremy Gibbons, Graham Hutton, Thorsten Altenkirch https://doi.org/10.1016/S1571-0661(04)80906-X
 - Unfolding — definition — folding, in this order, for avoiding unnecessary variables in logic programs https://link.springer.com/chapter/10.1007/3-540-54444-5_111
 - Also these Quora answers: https://www.quora.com/Why-is-an-unfold-function-useful  "Unfolds are useful in the same general way as folds; they allow you to work with recursive data structures without having to write recursive functions. Folds take a function and a seed value, traverse a recursive data structure applying that function to each element, returning a final value. Unfolds take a function and a seed value and build a recursive data structure populated with values. Think of them as folds running in reverse." https://qr.ae/pvibL4
+
+
 
 # Motivation
 

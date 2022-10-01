@@ -28,7 +28,7 @@ struct ManagedTask:View {
 }
 
 
-
+//This is the way. 
 actor StreamWithTask {
     static let shared = StreamWithTask()
     
