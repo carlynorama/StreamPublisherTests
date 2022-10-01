@@ -6,7 +6,9 @@ actors by wrapping @Published variables or replacing them all together.
 
 ## TL;DR
 
-Best way easy to wrap an @Published in a Stream:
+
+
+The real solution to wrapping an `AsyncPublisher` appears to be to stick to the synchronous context initializer and have it cancel it's own task: 
 
 ```
 actor StreamWithTask {
@@ -52,18 +54,18 @@ Stand Alone AsyncStreams:
 
 ## Resources
 
-# Related Projects
+### Related Projects
 - https://github.com/carlynorama/LocationExplorer
 - https://github.com/carlynorama/NotificationTasks
 - https://github.com/carlynorama/AsyncPublisherTests
 
-# AsyncStream Types
+### AsyncStream Types
 - https://github.com/apple/swift-evolution/blob/main/proposals/0314-async-stream.md
 - https://www.raywenderlich.com/34044359-asyncsequence-asyncstream-tutorial-for-ios
 - Meet the new alternative to Combine's Publisher! (it's called AsyncStream) https://www.youtube.com/watch?v=UwwKJLrg_0U 
 - https://stackoverflow.com/questions/73860731/asyncstream-spams-view-where-asyncpublisher-does-not/
 
-# Fold/Unfold
+### Fold/Unfold
 - Why the name "unfolding"
 -  "When is a function a fold or an unfold?" Jeremy Gibbons, Graham Hutton, Thorsten Altenkirch https://doi.org/10.1016/S1571-0661(04)80906-X
 - Unfolding — definition — folding, in this order, for avoiding unnecessary variables in logic programs https://link.springer.com/chapter/10.1007/3-540-54444-5_111
@@ -75,11 +77,11 @@ Stand Alone AsyncStreams:
 
 I ran into a behavior with AsyncStream I that did not make sense to me at first.
 
-I had an actor with a published variable which I could can "subscribe" to via an AsyncPublisher and it behaved as expected, updating only when there is a change in value. If I created an AsyncStream with a synchronous context (but with a potential task retention problem) it also behaved as expected.
+I had an actor with a published variable which I could can "subscribe" to via an AsyncPublisher and it behaved as expected, updating only when there is a change in value. The AsyncStream with a synchronous context (but with a potential task retention problem) it also behaved as expected.
 
-The weirdness happened when I wrapped that publisher in an AsyncStream with an asynchronous context. It started spamming the view with an update per loop it seems, NOT only when there was a change.  
+The weirdness happened when wrapping that publisher in an AsyncStream with an asynchronous context. It started spamming the view with an update per loop it seems, NOT only when there was a change.  
 
-I created this project to help figure out what I was missing about  (AsyncStream.init(unfolding:oncancel:))[https://developer.apple.com/documentation/swift/asyncstream/init(unfolding:oncancel:)?]
+This project was to help figure out what I was missing about  (AsyncStream.init(unfolding:oncancel:))[https://developer.apple.com/documentation/swift/asyncstream/init(unfolding:oncancel:)?]
 
 
 ## Initial Code
@@ -206,29 +208,6 @@ struct TestActorViewC:View {
     }
 }
 
-```
-
-## Best Answer for Simply Wrapping Publisher
-
-The real solution to wrapping a publisher appears to be to stick to the synchronous context initializer and have it cancel it's own task: 
-
-```
-public func stream() -> AsyncStream<Int> {
-        AsyncStream { continuation in
-            let streamTask = Task {
-                for await n in $counter.values {
-                    //do hard work to transform n 
-                    continuation.yield(n)
-                }
-            }
-
-            continuation.onTermination = { @Sendable _ in
-                streamTask.cancel()
-                print("StreamTask Canceled")
-            }
-
-        }
-    }
 ```
 
 ## Use case for the "Unfolding" init style 
