@@ -73,7 +73,7 @@ Stand Alone AsyncStreams:
 
 ## Motivation
 
-I ran into a behavior with AsyncStream I that did not make sense to me at first.
+I ran into a behavior with AsyncStream that did not make sense to me at first.
 
 I had an actor with a published variable which I could can "subscribe" to via an AsyncPublisher and it behaved as expected, updating only when there is a change in value. The AsyncStream with a synchronous context (but with a potential task retention problem) it also behaved as expected.
 
